@@ -1,0 +1,34 @@
+{
+    "name": "alfacode-team/hkm-plugin-passkeys",
+    "description": "HKM Kernel plugin providing 'auth.passkeys' — native WebAuthn registration and authentication.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["hkm-kernel", "plugin", "php", "auth.passkeys", "webauthn", "passkeys", "fido2", "cose", "cbor"],
+    "require": {
+        "php": ">=8.4",
+        "ext-openssl": "*",
+        "ext-sodium": "*",
+        "ext-mbstring": "*",
+        "alfacode-team/php-service-platform": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11 || ^12 || ^13"
+    },
+    "autoload": {
+        "psr-4": {
+            "Plugins\\Passkeys\\": ""
+        },
+        "exclude-from-classmap": ["tests/", "database/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Unit\\Plugins\\Passkeys\\": "tests/"
+        }
+    },
+    "extra": {
+        "//": "No vendor WebAuthn library. The ceremonies are a CBOR decode, a COSE-to-DER conversion and two signature checks; the checks ARE the security, so they belong where the tests that pin them can be read beside them. ext-sodium is required rather than suggested: EdDSA credentials cannot be verified without it, and discovering that at the first Ed25519 sign-in is worse than at install."
+    },
+    "config": { "sort-packages": true },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

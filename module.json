@@ -1,0 +1,43 @@
+{
+    "name": "passkeys",
+    "version": "1.0.0",
+    "kernel": "^1.19.0",
+    "solves": "auth.passkeys",
+    "type": "module",
+    "description": "WebAuthn registration and authentication — passkeys and security keys. Verifies the ceremonies natively: a CTAP2-subset CBOR decoder, COSE-to-DER key conversion, and signature checks through OpenSSL and libsodium for ES256, RS256 and EdDSA. No vendor WebAuthn library. Establishing the session is inverted through PasskeySessionStarter, because a correct sign-in needs the deployment's own guard.",
+
+    "requires": ["database.management", "session.management", "auth.identity", "http.security_filters"],
+    "requiresFilters": ["auth", "throttle"],
+
+    "exposes": [
+        "Plugins\\Passkeys\\API\\Contracts\\PasskeyServiceContract",
+        "Plugins\\Passkeys\\API\\Contracts\\PasskeyStoreContract"
+    ],
+
+    "routePrefix": "/auth/passkeys",
+    "routes": [
+        { "method": "POST",   "path": "/register/options", "handler": "Plugins\\Passkeys\\Infrastructure\\Http\\Controllers\\PasskeyController@registerOptions", "name": "passkeys.register.options", "filters": ["auth"] },
+        { "method": "POST",   "path": "/register",         "handler": "Plugins\\Passkeys\\Infrastructure\\Http\\Controllers\\PasskeyController@register",        "name": "passkeys.register",         "filters": ["auth"] },
+        { "method": "POST",   "path": "/login/options",    "handler": "Plugins\\Passkeys\\Infrastructure\\Http\\Controllers\\PasskeyController@loginOptions",    "name": "passkeys.login.options",    "filters": ["throttle:30,1"] },
+        { "method": "POST",   "path": "/login",            "handler": "Plugins\\Passkeys\\Infrastructure\\Http\\Controllers\\PasskeyController@login",           "name": "passkeys.login",            "filters": ["throttle:30,1"] },
+        { "method": "GET",    "path": "",                  "handler": "Plugins\\Passkeys\\Infrastructure\\Http\\Controllers\\PasskeyController@index",           "name": "passkeys.index",            "filters": ["auth"] },
+        { "method": "DELETE", "path": "/{id}",             "handler": "Plugins\\Passkeys\\Infrastructure\\Http\\Controllers\\PasskeyController@destroy",         "name": "passkeys.destroy",          "filters": ["auth"] }
+    ],
+
+    "emits": [],
+    "listens": [],
+
+    "commands": [
+        "Plugins\\Passkeys\\Infrastructure\\Cli\\PasskeyDoctorCommand"
+    ],
+
+    "config": [
+        { "key": "PASSKEYS_RP_ID",   "type": "string", "required": true },
+        { "key": "PASSKEYS_ORIGINS", "type": "string", "required": true },
+        { "key": "PASSKEYS_RP_NAME", "type": "string", "required": false },
+        { "key": "PASSKEYS_ATTESTATION",              "type": "string", "required": false, "default": "none" },
+        { "key": "PASSKEYS_REQUIRE_USER_VERIFICATION", "type": "bool",  "required": false, "default": false },
+        { "key": "PASSKEYS_MAX_PER_USER",             "type": "int",    "required": false, "default": 20 },
+        { "key": "PASSKEYS_CHALLENGE_TTL",            "type": "int",    "required": false, "default": 120 }
+    ]
+}

@@ -1,0 +1,33 @@
+{
+    "lockVersion": 1,
+    "//": "Every string here is published and held outside this plugin. Entries are added by `ground contract:lock --update` and retired with --deprecate \u2014 never deleted.",
+    "surfaces": {
+        "solves": [
+            "auth.passkeys"
+        ],
+        "routes": [
+            "passkeys.destroy",
+            "passkeys.index",
+            "passkeys.login",
+            "passkeys.login.options",
+            "passkeys.register",
+            "passkeys.register.options"
+        ],
+        "events": [],
+        "contracts": [
+            "Plugins\\Passkeys\\API\\Contracts\\PasskeyServiceContract",
+            "Plugins\\Passkeys\\API\\Contracts\\PasskeyStoreContract"
+        ],
+        "config": [
+            "PASSKEYS_ATTESTATION",
+            "PASSKEYS_CHALLENGE_TTL",
+            "PASSKEYS_MAX_PER_USER",
+            "PASSKEYS_ORIGINS",
+            "PASSKEYS_REQUIRE_USER_VERIFICATION",
+            "PASSKEYS_RP_ID",
+            "PASSKEYS_RP_NAME"
+        ],
+        "permissions": []
+    },
+    "deprecated": {}
+}
